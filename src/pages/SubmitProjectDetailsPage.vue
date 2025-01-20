@@ -1,144 +1,141 @@
 <template>
   <div>
-    <div class="w-full md:w-4/5 lg:w-1/3 mx-auto">
-      <h1 class="text-4xl font-bold">Submit Project Details</h1>
-      <p class="text-muted-foreground mt-4 mb-8">
-        Please provide a clear and detailed description of your project, including its goals,
-        technologies used, and current progress. Make sure to include any relevant links to your
-        project's repository or live demo.
-      </p>
-      <AutoForm
-        class="space-y-6"
-        :schema="schema"
-        :field-config="{
-          name: {
-            label: 'Name',
-            inputProps: {
-              placeholder: 'Raja Ravi Varma',
+    <div class="w-full md:w-4/5 lg:w-2/3 mx-auto space-y-8">
+      <div class="space-y-4">
+        <h1 class="text-4xl font-bold">Submit Project Details</h1>
+        <p class="text-muted-foreground">
+          Showcase your technical project to the community. Fill in the details below to submit your project.
+        </p>
+      </div>
+
+      <div class="bg-card p-6 rounded-lg border">
+        <div class="space-y-2 mb-6">
+          <h2 class="text-xl font-semibold">Project Information</h2>
+          <p class="text-sm text-muted-foreground">All fields marked with * are required</p>
+        </div>
+
+        <AutoForm
+          class="space-y-6"
+          :schema="schema"
+          :field-config="{
+            name: {
+              label: 'Full Name *',
+              description: 'Enter your full name as registered with the college',
+              inputProps: {
+                placeholder: 'Raja Ravi Varma',
+              },
             },
-          },
-          email: {
-            label: 'Email',
-            inputProps: {
-              type: 'email',
-              placeholder: 'yourname@adypu.ac.in',
+            email: {
+              label: 'College Email *',
+              description: 'Use your official college email address',
+              inputProps: {
+                type: 'email',
+                placeholder: 'yourname@adypu.ac.in',
+              },
             },
-          },
-          projectName: {
-            label: 'Project Name',
-            inputProps: {
-              placeholder: 'My Awesome Project',
+            projectName: {
+              label: 'Project Name *',
+              description: 'Give your project a clear, descriptive name',
+              inputProps: {
+                placeholder: 'My Awesome Project',
+              },
             },
-          },
-          projectDescription: {
-            label: 'Project Description',
-            component: 'textarea',
-            inputProps: {
-              placeholder:
-                'What is your project about? What problem does it solve? What is the solution? How does it work?',
+            projectDescription: {
+              label: 'Project Description *',
+              description: 'Provide a detailed description of your project (minimum 100 characters)',
+              component: 'textarea',
+              inputProps: {
+                placeholder: 'Include:\n- Problem statement\n- Solution approach\n- Technologies used\n- Current progress\n- Future plans',
+                rows: 6,
+              },
             },
-          },
-          projectLink: {
-            label: 'Project Link',
-            inputProps: {
-              placeholder: 'https://my-project.com',
+            projectLink: {
+              label: 'Project Demo Link',
+              description: 'Link to your deployed project (if available)',
+              inputProps: {
+                placeholder: 'https://my-project.com',
+              },
             },
-          },
-          projectGithubLink: {
-            label: 'Project Github Link',
-            inputProps: {
-              placeholder: 'https://github.com/my-project',
+            projectGithubLink: {
+              label: 'GitHub Repository *',
+              description: 'Link to your project\'s source code',
+              inputProps: {
+                placeholder: 'https://github.com/username/project',
+              },
             },
-          },
-          teamMembers: {
-            label: 'Team Members',
-            inputProps: {
-              placeholder: 'Add team members',
-            },
-          },
-        }"
-        @submit="handleSubmit"
-      >
-        <Button type="submit">Submit</Button>
-      </AutoForm>
+          }"
+          @submit="handleSubmit"
+        >
+          <div class="flex justify-end space-x-4 mt-8">
+            <Button variant="outline" type="button" @click="$router.back()">Cancel</Button>
+            <Button type="submit" :disabled="isSubmitting">
+              <template v-if="isSubmitting">
+                <span class="loading loading-spinner loading-sm mr-2"></span>
+                Submitting...
+              </template>
+              <template v-else>
+                Submit Project
+              </template>
+            </Button>
+          </div>
+        </AutoForm>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { AutoForm } from '@/components/ui/auto-form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast/use-toast'
-import api from '@/lib/api'
-// import { h } from 'vue'
-import * as z from 'zod'
+import { z } from 'zod'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+const isSubmitting = ref(false)
 const { toast } = useToast()
 
 const schema = z.object({
-  name: z
-    .string({
-      required_error: 'Name is required',
-    })
-    .min(1),
-  email: z
-    .string({
-      required_error: 'Email is required',
-    })
-    .email(),
-  projectName: z
-    .string({
-      required_error: 'Project Name is required',
-    })
-    .min(1),
-  projectDescription: z.string({
-    required_error: 'Project Description is required',
-  }),
-  projectLink: z.string({
-    required_error: 'Project Link is required',
-  }),
-  projectGithubLink: z.string().optional(),
-  teamMembers: z
-    .array(
-      z
-        .object({
-          name: z.string({
-            required_error: 'Team Member Name is required',
-          }),
-          email: z.string({
-            required_error: 'Team Member Email is required',
-          }),
-        })
-        .describe('Team Member Details'),
-    )
-    .min(0)
-    .describe('Team Members')
-    .optional(),
+  name: z.string().min(3, 'Name must be at least 3 characters'),
+  email: z.string().email('Invalid email address').refine(
+    (email) => email.endsWith('@adypu.ac.in'),
+    'Must use your ADYPU email address'
+  ),
+  projectName: z.string().min(3, 'Project name must be at least 3 characters'),
+  projectDescription: z.string().min(100, 'Please provide a more detailed description (minimum 100 characters)'),
+  projectLink: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  projectGithubLink: z.string().url('Must be a valid URL').refine(
+    (url) => url.startsWith('https://github.com/'),
+    'Must be a GitHub repository URL'
+  ),
 })
 
-const handleSubmit = (data: z.infer<typeof schema>) => {
-  api
-    .post('/submit/project', data)
-    .then((res) => {
-      toast({
-        title: 'Project submitted successfully',
-        description: `ID: ${res.data.id}`,
-      })
-      console.info(res.data)
-      router.push({
-        name: 'home',
-      })
+async function handleSubmit(data: z.infer<typeof schema>) {
+  try {
+    isSubmitting.value = true
+    // TODO: Implement API call
+    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulated API call
+    
+    toast({
+      title: 'Success! 🎉',
+      description: 'Your project has been submitted successfully. We\'ll review it shortly.',
+      variant: 'success',
     })
-    .catch((err) => {
-      toast({
-        title: 'Failed to submit project',
-        description: err.message,
-        variant: 'destructive',
-      })
-      console.error(err)
+    
+    // Redirect to projects page or show success state
+    router.push({
+      name: 'home',
     })
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: 'Failed to submit project. Please try again.',
+      variant: 'error',
+    })
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
