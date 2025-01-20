@@ -2,18 +2,13 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import { ref } from 'vue'
-import { Home, LayoutDashboard, Info, Bell, User, Menu, X } from 'lucide-vue-next'
+import { Home, Info, Bell, User, Menu, X } from 'lucide-vue-next'
 
 const links = [
   {
     label: 'Home',
     to: '/',
     icon: Home
-  },
-  {
-    label: 'Dashboard',
-    to: '/dashboard',
-    icon: LayoutDashboard
   },
   {
     label: 'About',
@@ -49,16 +44,6 @@ const isMenuOpen = ref(false)
               <component :is="link.icon" class="h-4 w-4" />
               <span>{{ link.label }}</span>
             </RouterLink>
-          </div>
-
-          <!-- User Menu -->
-          <div class="flex items-center space-x-2 sm:space-x-4">
-            <Button variant="ghost" size="icon" class="hover:bg-accent/50 transition-colors duration-200">
-              <Bell class="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" class="hover:bg-accent/50 transition-colors duration-200">
-              <User class="h-4 w-4" />
-            </Button>
           </div>
         </nav>
 
@@ -99,17 +84,6 @@ const isMenuOpen = ref(false)
               <span>{{ link.label }}</span>
             </RouterLink>
           </div>
-          <!-- Mobile User Menu -->
-          <div class="mt-4 flex flex-col space-y-2 border-t pt-4">
-            <Button variant="ghost" size="sm" class="w-full justify-start space-x-2 p-3">
-              <Bell class="h-4 w-4" />
-              <span>Notifications</span>
-            </Button>
-            <Button variant="ghost" size="sm" class="w-full justify-start space-x-2 p-3">
-              <User class="h-4 w-4" />
-              <span>Profile</span>
-            </Button>
-          </div>
         </nav>
       </transition>
     </header>
@@ -131,45 +105,10 @@ const isMenuOpen = ref(false)
     </main>
 
     <!-- Footer -->
-    <footer class="border-t bg-muted/40 py-6 sm:py-8 mt-auto">
+    <footer class="border-t bg-muted/40 py-6">
       <div class="container mx-auto max-w-7xl px-4 sm:px-8">
-        <div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
-          <!-- Company Info -->
-          <div class="flex flex-col space-y-3">
-            <h3 class="text-sm font-medium">Company</h3>
-            <RouterLink to="/about" class="text-sm text-muted-foreground hover:text-foreground">About</RouterLink>
-            <RouterLink to="/careers" class="text-sm text-muted-foreground hover:text-foreground">Careers</RouterLink>
-            <RouterLink to="/contact" class="text-sm text-muted-foreground hover:text-foreground">Contact</RouterLink>
-          </div>
-
-          <!-- Resources -->
-          <div class="flex flex-col space-y-3">
-            <h3 class="text-sm font-medium">Resources</h3>
-            <RouterLink to="/docs" class="text-sm text-muted-foreground hover:text-foreground">Documentation</RouterLink>
-            <RouterLink to="/help" class="text-sm text-muted-foreground hover:text-foreground">Help Center</RouterLink>
-            <RouterLink to="/status" class="text-sm text-muted-foreground hover:text-foreground">Status</RouterLink>
-          </div>
-
-          <!-- Legal -->
-          <div class="flex flex-col space-y-3">
-            <h3 class="text-sm font-medium">Legal</h3>
-            <RouterLink to="/privacy" class="text-sm text-muted-foreground hover:text-foreground">Privacy</RouterLink>
-            <RouterLink to="/terms" class="text-sm text-muted-foreground hover:text-foreground">Terms</RouterLink>
-          </div>
-
-          <!-- Social -->
-          <div class="flex flex-col space-y-3">
-            <h3 class="text-sm font-medium">Social</h3>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">Twitter</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">LinkedIn</a>
-          </div>
-        </div>
-
-        <div class="mt-8 border-t pt-8 text-center">
-          <p class="text-sm text-muted-foreground">
-            {{ new Date().getFullYear() }} Internal Tools. All rights reserved.
-          </p>
+        <div class="text-center text-sm text-muted-foreground">
+          <p>&copy; {{ new Date().getFullYear() }} Internal Tools. All rights reserved.</p>
         </div>
       </div>
     </footer>
