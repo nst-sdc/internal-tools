@@ -28,7 +28,7 @@ const isMenuOpen = ref(false)
         <!-- Logo -->
         <RouterLink to="/" class="mr-4 sm:mr-6 flex items-center space-x-2 transition-transform hover:scale-105">
           <div class="h-5 w-5 sm:h-6 sm:w-6 bg-primary rounded-sm"></div>
-          <span class="text-sm sm:text-base font-bold tracking-tight">Internal Tools</span>
+          <span class="text-sm sm:text-base font-bold tracking-tight">AchieveHub</span>
         </RouterLink>
 
         <!-- Desktop Navigation -->
@@ -108,7 +108,7 @@ const isMenuOpen = ref(false)
     <footer class="border-t bg-muted/40 py-6">
       <div class="container mx-auto max-w-7xl px-4 sm:px-8">
         <div class="text-center text-sm text-muted-foreground">
-          <p>&copy; {{ new Date().getFullYear() }} Internal Tools. All rights reserved.</p>
+          <p>&copy; {{ new Date().getFullYear() }} AchieveHub. All rights reserved.</p>
         </div>
       </div>
     </footer>
