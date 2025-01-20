@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <div class="text-center space-y-4">
       <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-        Welcome to Internal Tools
+        Welcome to AchieveHub
       </h1>
       <p class="mx-auto max-w-[700px] text-muted-foreground text-lg sm:text-xl">
         A platform for students to showcase their technical achievements and contributions.
