@@ -2,18 +2,23 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import { ref } from 'vue'
-import { Home, Info, Bell, User, Menu, X } from 'lucide-vue-next'
+import { Home, Info, List, Menu, X } from 'lucide-vue-next'
 
 const links = [
   {
     label: 'Home',
     to: '/',
-    icon: Home
+    icon: Home,
+  },
+  {
+    label: 'Submissions',
+    to: '/submissions',
+    icon: List,
   },
   {
     label: 'About',
     to: '/about',
-    icon: Info
+    icon: Info,
   },
 ]
 
@@ -21,18 +26,31 @@ const isMenuOpen = ref(false)
 </script>
 
 <template>
-  <div class="flex min-h-screen w-full flex-col bg-background text-foreground antialiased">
+  <div
+    class="flex min-h-screen w-full flex-col bg-background text-foreground antialiased"
+  >
     <!-- Header -->
-    <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200">
-      <div class="container flex h-14 sm:h-16 items-center px-4 sm:px-8 mx-auto max-w-7xl">
+    <header
+      class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200"
+    >
+      <div
+        class="container flex h-14 sm:h-16 items-center px-4 sm:px-8 mx-auto max-w-7xl"
+      >
         <!-- Logo -->
-        <RouterLink to="/" class="mr-4 sm:mr-6 flex items-center space-x-2 transition-transform hover:scale-105">
+        <RouterLink
+          to="/"
+          class="mr-4 sm:mr-6 flex items-center space-x-2 transition-transform hover:scale-105"
+        >
           <div class="h-5 w-5 sm:h-6 sm:w-6 bg-primary rounded-sm"></div>
-          <span class="text-sm sm:text-base font-bold tracking-tight">AchieveHub</span>
+          <span class="text-sm sm:text-base font-bold tracking-tight"
+            >AchieveHub</span
+          >
         </RouterLink>
 
         <!-- Desktop Navigation -->
-        <nav class="hidden md:flex md:flex-1 md:items-center md:justify-between">
+        <nav
+          class="hidden md:flex md:flex-1 md:items-center md:justify-between"
+        >
           <div class="flex items-center space-x-1 lg:space-x-2">
             <RouterLink
               v-for="link in links"
@@ -89,7 +107,9 @@ const isMenuOpen = ref(false)
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 container py-6 sm:py-8 md:py-10 px-4 sm:px-8 mx-auto max-w-7xl">
+    <main
+      class="flex-1 container py-6 sm:py-8 md:py-10 px-4 sm:px-8 mx-auto max-w-7xl"
+    >
       <RouterView v-slot="{ Component }">
         <transition
           enter-active-class="transition duration-200 ease-out"
@@ -108,7 +128,10 @@ const isMenuOpen = ref(false)
     <footer class="border-t bg-muted/40 py-6">
       <div class="container mx-auto max-w-7xl px-4 sm:px-8">
         <div class="text-center text-sm text-muted-foreground">
-          <p>&copy; {{ new Date().getFullYear() }} AchieveHub. All rights reserved.</p>
+          <p>
+            &copy; {{ new Date().getFullYear() }} AchieveHub. All rights
+            reserved.
+          </p>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -14,6 +15,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -21,22 +24,26 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // MongoDB connection with mongoose
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/projectsDb';
+const mongoUrl =
+  process.env.MONGODB_URI || 'mongodb://localhost:27017/projectsDb';
 
 // Define schema with type and data fields
-const SubmissionSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    required: true
+const SubmissionSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      required: true,
+    },
+    data: {
+      type: mongoose.Schema.Types.Mixed,
+      required: true,
+    },
   },
-  data: {
-    type: mongoose.Schema.Types.Mixed,
-    required: true
-  }
-}, {
-  timestamps: true,
-  strict: false // Allows for flexible document structure
-});
+  {
+    timestamps: true,
+    strict: false, // Allows for flexible document structure
+  },
+);
 
 const Submission = mongoose.model('Submission', SubmissionSchema);
 
@@ -57,13 +64,28 @@ app.post('/api/submit/:type', async (req, res) => {
     const { type } = req.params;
     const submission = new Submission({
       type,
-      data: req.body
+      data: req.body,
     });
     const savedSubmission = await submission.save();
     res.json({ success: true, id: savedSubmission._id });
   } catch (err) {
     console.error('Failed to save submission:', err);
-    res.status(500).json({ success: false, error: 'Failed to save submission' });
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to save submission' });
+  }
+});
+
+// API route to get all submissions
+app.get('/api/submissions', async (req, res) => {
+  try {
+    const submissions = await Submission.find().sort({ createdAt: -1 });
+    res.json(submissions);
+  } catch (err) {
+    console.error('Failed to fetch submissions:', err);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to fetch submissions' });
   }
 });
 
@@ -81,5 +103,3 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
-
-
