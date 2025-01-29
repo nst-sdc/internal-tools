@@ -23,7 +23,7 @@
           :schema="schema"
           :field-config="{
             name: {
-              label: 'Full Name *',
+              label: 'Full Name',
               description:
                 'Enter your full name as registered with the college',
               inputProps: {
@@ -31,7 +31,7 @@
               },
             },
             email: {
-              label: 'College Email *',
+              label: 'College Email',
               description: 'Your official college email address',
               inputProps: {
                 type: 'email',
@@ -39,14 +39,14 @@
               },
             },
             competitionName: {
-              label: 'Competition Name *',
+              label: 'Competition Name',
               description: 'Name of the hackathon or competition',
               inputProps: {
                 placeholder: 'Smart India Hackathon 2025',
               },
             },
             competitionType: {
-              label: 'Competition Type *',
+              label: 'Competition Type',
               description: 'Select the type of competition',
               component: 'select',
               inputProps: {
@@ -60,7 +60,7 @@
               },
             },
             description: {
-              label: 'Project Description *',
+              label: 'Project Description',
               description:
                 'Detailed description of your project/solution (minimum 150 characters)',
               component: 'textarea',
@@ -86,7 +86,7 @@
               },
             },
             teamMembers: {
-              label: 'Team Members *',
+              label: 'Team Members',
               description: 'List your team members (one per line)',
               component: 'textarea',
               inputProps: {

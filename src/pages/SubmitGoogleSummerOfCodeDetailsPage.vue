@@ -22,14 +22,14 @@
           :schema="schema"
           :field-config="{
             name: {
-              label: 'Full Name *',
+              label: 'Full Name',
               description: 'Enter your full name as registered with GSoC',
               inputProps: {
                 placeholder: 'John Doe',
               },
             },
             githubEmail: {
-              label: 'GitHub Email *',
+              label: 'GitHub Email',
               description: 'Email associated with your GitHub account',
               inputProps: {
                 type: 'email',
@@ -37,36 +37,36 @@
               },
             },
             collegeEmail: {
-              label: 'College Email *',
+              label: 'College Email',
               description: 'Your official college email address',
               inputProps: {
                 type: 'email',
-                placeholder: 'john@adypu.ac.in',
+                placeholder: 'john@adypu.edu.in',
               },
             },
             githubId: {
-              label: 'GitHub Username *',
+              label: 'GitHub Username',
               description: 'Your GitHub username used for GSoC contributions',
               inputProps: {
                 placeholder: 'johndoe',
               },
             },
             organization: {
-              label: 'GSoC Organization *',
+              label: 'GSoC Organization',
               description: 'The organization you contributed to',
               inputProps: {
                 placeholder: 'e.g., TensorFlow, Django, etc.',
               },
             },
             projectTitle: {
-              label: 'Project Title *',
+              label: 'Project Title',
               description: 'Title of your GSoC project',
               inputProps: {
                 placeholder: 'e.g., Implement Feature X for Project Y',
               },
             },
             projectDescription: {
-              label: 'Project Description *',
+              label: 'Project Description',
               description:
                 'Detailed description of your GSoC project (minimum 200 characters)',
               component: 'textarea',
@@ -77,7 +77,7 @@
               },
             },
             projectLink: {
-              label: 'Project Link *',
+              label: 'Project Link',
               description: 'Link to your GSoC project page or final submission',
               inputProps: {
                 placeholder: 'https://summerofcode.withgoogle.com/projects/...',
@@ -124,7 +124,7 @@ const schema = z.object({
     .string()
     .email('Invalid email address')
     .refine(
-      (email) => email.endsWith('@adypu.ac.in'),
+      (email) => email.endsWith('@adypu.edu.in'),
       'Must use your ADYPU email address'
     ),
   githubId: z

@@ -22,7 +22,7 @@
           :schema="schema"
           :field-config="{
             name: {
-              label: 'Full Name *',
+              label: 'Full Name',
               description:
                 'Enter your full name as registered with the college',
               inputProps: {
@@ -30,22 +30,22 @@
               },
             },
             email: {
-              label: 'College Email *',
+              label: 'College Email',
               description: 'Use your official college email address',
               inputProps: {
                 type: 'email',
-                placeholder: 'yourname@adypu.ac.in',
+                placeholder: 'yourname@adypu.edu.in',
               },
             },
             projectName: {
-              label: 'Project Name *',
+              label: 'Project Name',
               description: 'Give your project a clear, descriptive name',
               inputProps: {
                 placeholder: 'My Awesome Project',
               },
             },
             projectDescription: {
-              label: 'Project Description *',
+              label: 'Project Description',
               description:
                 'Provide a detailed description of your project (minimum 100 characters)',
               component: 'textarea',
@@ -63,7 +63,7 @@
               },
             },
             projectGithubLink: {
-              label: 'GitHub Repository *',
+              label: 'GitHub Repository',
               description: 'Link to your project\'s source code',
               inputProps: {
                 placeholder: 'https://github.com/username/project',
@@ -110,7 +110,7 @@ const schema = z.object({
     .string()
     .email('Invalid email address')
     .refine(
-      (email) => email.endsWith('@adypu.ac.in'),
+      (email) => email.endsWith('@adypu.edu.in'),
       'Must use your ADYPU email address'
     ),
   projectName: z.string().min(3, 'Project name must be at least 3 characters'),
