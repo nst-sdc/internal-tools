@@ -52,7 +52,6 @@
               inputProps: {
                 placeholder:
                   'Include:\n- Problem statement\n- Solution approach\n- Technologies used\n- Current progress\n- Future plans',
-                rows: 6,
               },
             },
             projectLink: {
@@ -145,7 +144,6 @@ async function handleSubmit(data: z.infer<typeof schema>) {
       title: 'Success! 🎉',
       description:
         "Your project has been submitted successfully. We'll review it shortly.",
-      variant: 'success',
     })
 
     // Redirect to submissions page
@@ -157,7 +155,7 @@ async function handleSubmit(data: z.infer<typeof schema>) {
     toast({
       title: 'Error',
       description: 'Failed to submit project. Please try again.',
-      variant: 'error',
+      variant: 'destructive',
     })
   } finally {
     isSubmitting.value = false

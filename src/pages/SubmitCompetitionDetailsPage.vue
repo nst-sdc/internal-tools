@@ -49,15 +49,6 @@
               label: 'Competition Type',
               description: 'Select the type of competition',
               component: 'select',
-              inputProps: {
-                options: [
-                  { label: 'Hackathon', value: 'hackathon' },
-                  { label: 'Coding Contest', value: 'coding_contest' },
-                  { label: 'Design Challenge', value: 'design_challenge' },
-                  { label: 'CTF', value: 'ctf' },
-                  { label: 'Other', value: 'other' },
-                ],
-              },
             },
             description: {
               label: 'Project Description',
@@ -67,7 +58,6 @@
               inputProps: {
                 placeholder:
                   'Include:\n- Problem statement\n- Your solution\n- Technologies used\n- Unique features\n- Team\'s approach',
-                rows: 6,
               },
             },
             competitionUrl: {
@@ -92,22 +82,12 @@
               inputProps: {
                 placeholder:
                   'Format: Name - Email - Role\nJohn Doe - john@adypu.edu.in - Frontend Developer\nJane Smith - jane@adypu.edu.in - Backend Developer',
-                rows: 4,
               },
             },
             achievementLevel: {
               label: 'Achievement Level',
               description: 'Select your achievement level in the competition',
               component: 'select',
-              inputProps: {
-                options: [
-                  { label: 'Not Participated Yet', value: 'not_participated' },
-                  { label: 'Participated', value: 'participated' },
-                  { label: 'Finalist', value: 'finalist' },
-                  { label: 'Winner', value: 'winner' },
-                  { label: 'Runner Up', value: 'runner_up' },
-                ],
-              },
             },
           }"
           @submit="handleSubmit"
@@ -143,6 +123,21 @@ const router = useRouter()
 const isSubmitting = ref(false)
 const { toast } = useToast()
 
+const CompetitionTypes = [
+  'hackathon',
+  'coding_contest',
+  'design_challenge',
+  'ctf',
+  'other',
+] as const
+const AchievementLevels = [
+  'not_participated',
+  'participated',
+  'finalist',
+  'winner',
+  'runner_up',
+] as const
+
 // Helper function to validate team members format
 const validateTeamMembers = (value: string) => {
   const lines = value.split('\n').filter((line) => line.trim())
@@ -164,12 +159,9 @@ const schema = z.object({
   competitionName: z
     .string()
     .min(3, 'Competition name must be at least 3 characters'),
-  competitionType: z.enum(
-    ['hackathon', 'coding_contest', 'design_challenge', 'ctf', 'other'],
-    {
-      required_error: 'Please select a competition type',
-    }
-  ),
+  competitionType: z.enum(CompetitionTypes, {
+    required_error: 'Please select a competition type',
+  }),
   description: z
     .string()
     .min(
@@ -192,12 +184,9 @@ const schema = z.object({
       validateTeamMembers,
       'Please list team members in the format: Name - Email - Role (one per line, all with @adypu.edu.in emails)'
     ),
-  achievementLevel: z.enum(
-    ['not_participated', 'participated', 'finalist', 'winner', 'runner_up'],
-    {
-      required_error: 'Please select an achievement level',
-    }
-  ),
+  achievementLevel: z.enum(AchievementLevels, {
+    required_error: 'Please select an achievement level',
+  }),
 })
 
 async function handleSubmit(data: z.infer<typeof schema>) {
@@ -211,7 +200,6 @@ async function handleSubmit(data: z.infer<typeof schema>) {
       title: 'Success! 🎉',
       description:
         "Your competition entry has been submitted successfully. We'll review it shortly.",
-      variant: 'success',
     })
 
     // Redirect to submissions page
@@ -223,7 +211,7 @@ async function handleSubmit(data: z.infer<typeof schema>) {
     toast({
       title: 'Error',
       description: 'Failed to submit competition entry. Please try again.',
-      variant: 'error',
+      variant: 'destructive',
     })
   } finally {
     isSubmitting.value = false

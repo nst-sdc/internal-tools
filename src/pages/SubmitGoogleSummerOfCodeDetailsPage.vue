@@ -73,7 +73,6 @@
               inputProps: {
                 placeholder:
                   'Include:\n- Project goals\n- Your contributions\n- Technologies used\n- Challenges faced\n- Achievements',
-                rows: 6,
               },
             },
             projectLink: {
@@ -166,7 +165,6 @@ async function handleSubmit(data: z.infer<typeof schema>) {
       title: 'Success! 🎉',
       description:
         "Your GSoC profile has been submitted successfully. We'll review it shortly.",
-      variant: 'success',
     })
 
     // Redirect to submissions page
@@ -178,7 +176,7 @@ async function handleSubmit(data: z.infer<typeof schema>) {
     toast({
       title: 'Error',
       description: 'Failed to submit GSoC profile. Please try again.',
-      variant: 'error',
+      variant: 'destructive',
     })
   } finally {
     isSubmitting.value = false
