@@ -4,14 +4,17 @@
       <div class="space-y-4">
         <h1 class="text-4xl font-bold">Submit GSoC Profile</h1>
         <p class="text-muted-foreground">
-          Share your Google Summer of Code experience with the community. This information will help inspire and guide future applicants.
+          Share your Google Summer of Code experience with the community. This
+          information will help inspire and guide future applicants.
         </p>
       </div>
 
       <div class="bg-card p-6 rounded-lg border">
         <div class="space-y-2 mb-6">
           <h2 class="text-xl font-semibold">GSoC Information</h2>
-          <p class="text-sm text-muted-foreground">All fields marked with * are required</p>
+          <p class="text-sm text-muted-foreground">
+            All fields marked with * are required
+          </p>
         </div>
 
         <AutoForm
@@ -64,10 +67,12 @@
             },
             projectDescription: {
               label: 'Project Description *',
-              description: 'Detailed description of your GSoC project (minimum 200 characters)',
+              description:
+                'Detailed description of your GSoC project (minimum 200 characters)',
               component: 'textarea',
               inputProps: {
-                placeholder: 'Include:\n- Project goals\n- Your contributions\n- Technologies used\n- Challenges faced\n- Achievements',
+                placeholder:
+                  'Include:\n- Project goals\n- Your contributions\n- Technologies used\n- Challenges faced\n- Achievements',
                 rows: 6,
               },
             },
@@ -82,15 +87,15 @@
           @submit="handleSubmit"
         >
           <div class="flex justify-end space-x-4 mt-8">
-            <Button variant="outline" type="button" @click="$router.back()">Cancel</Button>
+            <Button variant="outline" type="button" @click="$router.back()"
+              >Cancel</Button
+            >
             <Button type="submit" :disabled="isSubmitting">
               <template v-if="isSubmitting">
                 <span class="loading loading-spinner loading-sm mr-2"></span>
                 Submitting...
               </template>
-              <template v-else>
-                Submit GSoC Profile
-              </template>
+              <template v-else> Submit GSoC Profile </template>
             </Button>
           </div>
         </AutoForm>
@@ -105,44 +110,71 @@ import { AutoForm } from '@/components/ui/auto-form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { z } from 'zod'
+import { useRouter } from 'vue-router'
+import api from '@/lib/api'
 
+const router = useRouter()
 const isSubmitting = ref(false)
 const { toast } = useToast()
 
 const schema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
   githubEmail: z.string().email('Invalid email address'),
-  collegeEmail: z.string().email('Invalid email address').refine(
-    (email) => email.endsWith('@adypu.ac.in'),
-    'Must use your ADYPU email address'
-  ),
-  githubId: z.string().min(1, 'GitHub username is required').regex(
-    /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i,
-    'Invalid GitHub username format'
-  ),
-  organization: z.string().min(2, 'Organization name must be at least 2 characters'),
-  projectTitle: z.string().min(10, 'Project title must be at least 10 characters'),
-  projectDescription: z.string().min(200, 'Please provide a more detailed description (minimum 200 characters)'),
-  projectLink: z.string().url('Must be a valid URL').refine(
-    (url) => url.includes('summerofcode.withgoogle.com'),
-    'Must be a valid GSoC project URL'
-  ),
+  collegeEmail: z
+    .string()
+    .email('Invalid email address')
+    .refine(
+      (email) => email.endsWith('@adypu.ac.in'),
+      'Must use your ADYPU email address'
+    ),
+  githubId: z
+    .string()
+    .min(1, 'GitHub username is required')
+    .regex(
+      /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i,
+      'Invalid GitHub username format'
+    ),
+  organization: z
+    .string()
+    .min(2, 'Organization name must be at least 2 characters'),
+  projectTitle: z
+    .string()
+    .min(10, 'Project title must be at least 10 characters'),
+  projectDescription: z
+    .string()
+    .min(
+      200,
+      'Please provide a more detailed description (minimum 200 characters)'
+    ),
+  projectLink: z
+    .string()
+    .url('Must be a valid URL')
+    .refine(
+      (url) => url.includes('summerofcode.withgoogle.com'),
+      'Must be a valid GSoC project URL'
+    ),
 })
 
 async function handleSubmit(data: z.infer<typeof schema>) {
   try {
     isSubmitting.value = true
-    // TODO: Implement API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulated API call
-    
+
+    // Submit to the API
+    await api.post('/submit/gsoc-profile', data)
+
     toast({
       title: 'Success! 🎉',
-      description: 'Your GSoC profile has been submitted successfully. Thank you for sharing your experience!',
+      description:
+        "Your GSoC profile has been submitted successfully. We'll review it shortly.",
       variant: 'success',
     })
-    
-    // Redirect to GSoC profiles page or show success state
+
+    // Redirect to submissions page
+    router.push({
+      name: 'submissions',
+    })
   } catch (error) {
+    console.error('Failed to submit GSoC profile:', error)
     toast({
       title: 'Error',
       description: 'Failed to submit GSoC profile. Please try again.',

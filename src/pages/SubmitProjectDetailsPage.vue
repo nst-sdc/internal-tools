@@ -4,14 +4,17 @@
       <div class="space-y-4">
         <h1 class="text-4xl font-bold">Submit Project Details</h1>
         <p class="text-muted-foreground">
-          Showcase your technical project to the community. Fill in the details below to submit your project.
+          Showcase your technical project to the community. Fill in the details
+          below to submit your project.
         </p>
       </div>
 
       <div class="bg-card p-6 rounded-lg border">
         <div class="space-y-2 mb-6">
           <h2 class="text-xl font-semibold">Project Information</h2>
-          <p class="text-sm text-muted-foreground">All fields marked with * are required</p>
+          <p class="text-sm text-muted-foreground">
+            All fields marked with * are required
+          </p>
         </div>
 
         <AutoForm
@@ -20,7 +23,8 @@
           :field-config="{
             name: {
               label: 'Full Name *',
-              description: 'Enter your full name as registered with the college',
+              description:
+                'Enter your full name as registered with the college',
               inputProps: {
                 placeholder: 'Raja Ravi Varma',
               },
@@ -42,10 +46,12 @@
             },
             projectDescription: {
               label: 'Project Description *',
-              description: 'Provide a detailed description of your project (minimum 100 characters)',
+              description:
+                'Provide a detailed description of your project (minimum 100 characters)',
               component: 'textarea',
               inputProps: {
-                placeholder: 'Include:\n- Problem statement\n- Solution approach\n- Technologies used\n- Current progress\n- Future plans',
+                placeholder:
+                  'Include:\n- Problem statement\n- Solution approach\n- Technologies used\n- Current progress\n- Future plans',
                 rows: 6,
               },
             },
@@ -67,15 +73,15 @@
           @submit="handleSubmit"
         >
           <div class="flex justify-end space-x-4 mt-8">
-            <Button variant="outline" type="button" @click="$router.back()">Cancel</Button>
+            <Button variant="outline" type="button" @click="$router.back()"
+              >Cancel</Button
+            >
             <Button type="submit" :disabled="isSubmitting">
               <template v-if="isSubmitting">
                 <span class="loading loading-spinner loading-sm mr-2"></span>
                 Submitting...
               </template>
-              <template v-else>
-                Submit Project
-              </template>
+              <template v-else> Submit Project </template>
             </Button>
           </div>
         </AutoForm>
@@ -91,6 +97,7 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { z } from 'zod'
 import { useRouter } from 'vue-router'
+import api from '@/lib/api'
 
 const router = useRouter()
 
@@ -99,36 +106,54 @@ const { toast } = useToast()
 
 const schema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email('Invalid email address').refine(
-    (email) => email.endsWith('@adypu.ac.in'),
-    'Must use your ADYPU email address'
-  ),
+  email: z
+    .string()
+    .email('Invalid email address')
+    .refine(
+      (email) => email.endsWith('@adypu.ac.in'),
+      'Must use your ADYPU email address'
+    ),
   projectName: z.string().min(3, 'Project name must be at least 3 characters'),
-  projectDescription: z.string().min(100, 'Please provide a more detailed description (minimum 100 characters)'),
-  projectLink: z.string().url('Must be a valid URL').optional().or(z.literal('')),
-  projectGithubLink: z.string().url('Must be a valid URL').refine(
-    (url) => url.startsWith('https://github.com/'),
-    'Must be a GitHub repository URL'
-  ),
+  projectDescription: z
+    .string()
+    .min(
+      100,
+      'Please provide a more detailed description (minimum 100 characters)'
+    ),
+  projectLink: z
+    .string()
+    .url('Must be a valid URL')
+    .optional()
+    .or(z.literal('')),
+  projectGithubLink: z
+    .string()
+    .url('Must be a valid URL')
+    .refine(
+      (url) => url.startsWith('https://github.com/'),
+      'Must be a GitHub repository URL'
+    ),
 })
 
 async function handleSubmit(data: z.infer<typeof schema>) {
   try {
     isSubmitting.value = true
-    // TODO: Implement API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulated API call
-    
+
+    // Submit to the API
+    await api.post('/submit/project', data)
+
     toast({
       title: 'Success! 🎉',
-      description: 'Your project has been submitted successfully. We\'ll review it shortly.',
+      description:
+        "Your project has been submitted successfully. We'll review it shortly.",
       variant: 'success',
     })
-    
-    // Redirect to projects page or show success state
+
+    // Redirect to submissions page
     router.push({
-      name: 'home',
+      name: 'submissions',
     })
   } catch (error) {
+    console.error('Failed to submit project:', error)
     toast({
       title: 'Error',
       description: 'Failed to submit project. Please try again.',

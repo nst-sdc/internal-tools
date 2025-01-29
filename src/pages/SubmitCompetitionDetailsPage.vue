@@ -4,15 +4,18 @@
       <div class="space-y-4">
         <h1 class="text-4xl font-bold">Submit Competition Details</h1>
         <p class="text-muted-foreground">
-          Share your competition experience with the community. Whether you've participated or planning to participate,
-          your information will help inspire others.
+          Share your competition experience with the community. Whether you've
+          participated or planning to participate, your information will help
+          inspire others.
         </p>
       </div>
 
       <div class="bg-card p-6 rounded-lg border">
         <div class="space-y-2 mb-6">
           <h2 class="text-xl font-semibold">Competition Information</h2>
-          <p class="text-sm text-muted-foreground">All fields marked with * are required</p>
+          <p class="text-sm text-muted-foreground">
+            All fields marked with * are required
+          </p>
         </div>
 
         <AutoForm
@@ -21,7 +24,8 @@
           :field-config="{
             name: {
               label: 'Full Name *',
-              description: 'Enter your full name as registered with the college',
+              description:
+                'Enter your full name as registered with the college',
               inputProps: {
                 placeholder: 'Raja Ravi Varma',
               },
@@ -57,10 +61,12 @@
             },
             description: {
               label: 'Project Description *',
-              description: 'Detailed description of your project/solution (minimum 150 characters)',
+              description:
+                'Detailed description of your project/solution (minimum 150 characters)',
               component: 'textarea',
               inputProps: {
-                placeholder: 'Include:\n- Problem statement\n- Your solution\n- Technologies used\n- Unique features\n- Team\'s approach',
+                placeholder:
+                  'Include:\n- Problem statement\n- Your solution\n- Technologies used\n- Unique features\n- Team\'s approach',
                 rows: 6,
               },
             },
@@ -73,7 +79,8 @@
             },
             projectUrl: {
               label: 'Project URL',
-              description: 'Link to your project repository or demo (if available)',
+              description:
+                'Link to your project repository or demo (if available)',
               inputProps: {
                 placeholder: 'https://github.com/username/project',
               },
@@ -83,7 +90,8 @@
               description: 'List your team members (one per line)',
               component: 'textarea',
               inputProps: {
-                placeholder: 'Format: Name - Email - Role\nJohn Doe - john@adypu.edu.in - Frontend Developer\nJane Smith - jane@adypu.edu.in - Backend Developer',
+                placeholder:
+                  'Format: Name - Email - Role\nJohn Doe - john@adypu.edu.in - Frontend Developer\nJane Smith - jane@adypu.edu.in - Backend Developer',
                 rows: 4,
               },
             },
@@ -105,15 +113,15 @@
           @submit="handleSubmit"
         >
           <div class="flex justify-end space-x-4 mt-8">
-            <Button variant="outline" type="button" @click="$router.back()">Cancel</Button>
+            <Button variant="outline" type="button" @click="$router.back()"
+              >Cancel</Button
+            >
             <Button type="submit" :disabled="isSubmitting">
               <template v-if="isSubmitting">
                 <span class="loading loading-spinner loading-sm mr-2"></span>
                 Submitting...
               </template>
-              <template v-else>
-                Submit Competition Details
-              </template>
+              <template v-else> Submit Competition Details </template>
             </Button>
           </div>
         </AutoForm>
@@ -128,58 +136,93 @@ import { AutoForm } from '@/components/ui/auto-form'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/toast/use-toast'
 import { z } from 'zod'
+import { useRouter } from 'vue-router'
+import api from '@/lib/api'
 
+const router = useRouter()
 const isSubmitting = ref(false)
 const { toast } = useToast()
 
 // Helper function to validate team members format
 const validateTeamMembers = (value: string) => {
-  const lines = value.split('\n').filter(line => line.trim())
+  const lines = value.split('\n').filter((line) => line.trim())
   if (lines.length === 0) return false
-  
+
   const pattern = /^[^-]+ - [^@\s]+@adypu\.edu\.in - [^-]+$/
-  return lines.every(line => pattern.test(line.trim()))
+  return lines.every((line) => pattern.test(line.trim()))
 }
 
 const schema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
-  email: z.string().email('Invalid email address').refine(
-    (email) => email.endsWith('@adypu.edu.in'),
-    'Must use your ADYPU email address'
+  email: z
+    .string()
+    .email('Invalid email address')
+    .refine(
+      (email) => email.endsWith('@adypu.edu.in'),
+      'Must use your ADYPU email address'
+    ),
+  competitionName: z
+    .string()
+    .min(3, 'Competition name must be at least 3 characters'),
+  competitionType: z.enum(
+    ['hackathon', 'coding_contest', 'design_challenge', 'ctf', 'other'],
+    {
+      required_error: 'Please select a competition type',
+    }
   ),
-  competitionName: z.string().min(3, 'Competition name must be at least 3 characters'),
-  competitionType: z.enum(['hackathon', 'coding_contest', 'design_challenge', 'ctf', 'other'], {
-    required_error: 'Please select a competition type',
-  }),
-  description: z.string().min(150, 'Please provide a more detailed description (minimum 150 characters)'),
-  competitionUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
-  projectUrl: z.string().url('Must be a valid URL').optional().or(z.literal('')),
-  teamMembers: z.string().refine(
-    validateTeamMembers,
-    'Please list team members in the format: Name - Email - Role (one per line, all with @adypu.edu.in emails)'
+  description: z
+    .string()
+    .min(
+      150,
+      'Please provide a more detailed description (minimum 150 characters)'
+    ),
+  competitionUrl: z
+    .string()
+    .url('Must be a valid URL')
+    .optional()
+    .or(z.literal('')),
+  projectUrl: z
+    .string()
+    .url('Must be a valid URL')
+    .optional()
+    .or(z.literal('')),
+  teamMembers: z
+    .string()
+    .refine(
+      validateTeamMembers,
+      'Please list team members in the format: Name - Email - Role (one per line, all with @adypu.edu.in emails)'
+    ),
+  achievementLevel: z.enum(
+    ['not_participated', 'participated', 'finalist', 'winner', 'runner_up'],
+    {
+      required_error: 'Please select an achievement level',
+    }
   ),
-  achievementLevel: z.enum(['not_participated', 'participated', 'finalist', 'winner', 'runner_up'], {
-    required_error: 'Please select an achievement level',
-  }),
 })
 
 async function handleSubmit(data: z.infer<typeof schema>) {
   try {
     isSubmitting.value = true
-    // TODO: Implement API call
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulated API call
-    
+
+    // Submit to the API
+    await api.post('/submit/competition', data)
+
     toast({
       title: 'Success! 🎉',
-      description: 'Your competition details have been submitted successfully. Good luck with your participation!',
+      description:
+        "Your competition entry has been submitted successfully. We'll review it shortly.",
       variant: 'success',
     })
-    
-    // Redirect to competitions page or show success state
+
+    // Redirect to submissions page
+    router.push({
+      name: 'submissions',
+    })
   } catch (error) {
+    console.error('Failed to submit competition entry:', error)
     toast({
       title: 'Error',
-      description: 'Failed to submit competition details. Please try again.',
+      description: 'Failed to submit competition entry. Please try again.',
       variant: 'error',
     })
   } finally {
