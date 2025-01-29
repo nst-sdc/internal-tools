@@ -1,16 +1,16 @@
 <script setup lang="ts">
 interface ProjectSubmission {
-  name: string;
-  email: string;
-  projectName: string;
-  projectDescription: string;
-  projectLink: string;
-  projectGithubLink: string;
+  name: string
+  email: string
+  projectName: string
+  projectDescription: string
+  projectLink: string
+  projectGithubLink: string
 }
 
 defineProps<{
-  submission: ProjectSubmission;
-}>();
+  submission: ProjectSubmission
+}>()
 </script>
 
 <template>

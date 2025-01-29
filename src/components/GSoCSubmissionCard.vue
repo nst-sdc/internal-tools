@@ -1,31 +1,31 @@
 <script setup lang="ts">
 interface PR {
-  prLink: string;
-  status: string;
+  prLink: string
+  status: string
 }
 
 interface Project {
-  name: string;
-  githubLink: string;
-  prs: PR[];
+  name: string
+  githubLink: string
+  prs: PR[]
 }
 
 interface Organization {
-  name: string;
-  projects: Project[];
+  name: string
+  projects: Project[]
 }
 
 interface GSoCSubmission {
-  name: string;
-  githubEmail: string;
-  collegeEmail: string;
-  githubId: string;
-  organizations: Organization[];
+  name: string
+  githubEmail: string
+  collegeEmail: string
+  githubId: string
+  organizations: Organization[]
 }
 
 defineProps<{
-  submission: GSoCSubmission;
-}>();
+  submission: GSoCSubmission
+}>()
 </script>
 
 <template>

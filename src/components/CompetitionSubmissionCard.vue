@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 interface TeamMember {
-  name: string;
-  email: string;
+  name: string
+  email: string
 }
 
 interface CompetitionSubmission {
-  name: string;
-  email: string;
-  competitionName: string;
-  description: string;
-  competitionUrl: string;
-  teamMembers: TeamMember[];
+  name: string
+  email: string
+  competitionName: string
+  description: string
+  competitionUrl: string
+  teamMembers: TeamMember[]
 }
 
 const props = defineProps<{
-  submission: CompetitionSubmission;
-}>();
+  submission: CompetitionSubmission
+}>()
 
 // Combine submitter with team members
 const allTeamMembers = computed(() => {
   const submitter: TeamMember = {
     name: props.submission.name,
     email: props.submission.email,
-  };
-  return [submitter, ...(props.submission.teamMembers || [])];
-});
+  }
+  return [submitter, ...(props.submission.teamMembers || [])]
+})
 </script>
 
 <template>

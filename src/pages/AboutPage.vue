@@ -2,7 +2,9 @@
   <div class="max-w-4xl mx-auto space-y-12">
     <!-- Hero Section -->
     <div class="text-center space-y-4">
-      <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl">About AchieveHub</h1>
+      <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl">
+        About AchieveHub
+      </h1>
       <p class="text-xl text-muted-foreground max-w-[700px] mx-auto">
         Empowering students to document and showcase their technical journey.
       </p>
@@ -11,9 +13,10 @@
     <!-- Main Content -->
     <div class="prose prose-lg dark:prose-invert mx-auto">
       <p class="lead">
-        This platform helps students showcase their technical achievements, from projects to
-        competition participations and open source contributions. We believe in making it easier for
-        students to document and share their journey in technology.
+        This platform helps students showcase their technical achievements, from
+        projects to competition participations and open source contributions. We
+        believe in making it easier for students to document and share their
+        journey in technology.
       </p>
 
       <!-- Features Grid -->
@@ -58,18 +61,23 @@
     <!-- Credits Section -->
     <div class="rounded-lg border bg-muted/50 p-6 text-center space-y-4">
       <div class="space-y-2">
-        <h2 class="text-xl font-semibold">Created with ❤️ for NST Student Developer Club</h2>
+        <h2 class="text-xl font-semibold">
+          Created with ❤️ for NST Student Developer Club
+        </h2>
         <p class="text-muted-foreground">
           By
           <a
             href="https://github.com/krushndayshmookh"
             target="_blank"
             class="font-medium text-primary hover:text-primary/80 transition-colors"
-          >Krushn Dayshmookh</a>
+            >Krushn Dayshmookh</a
+          >
         </p>
       </div>
-      
-      <div class="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+
+      <div
+        class="flex items-center justify-center space-x-4 text-sm text-muted-foreground"
+      >
         <span>Built with Vue + TypeScript</span>
         <span>•</span>
         <a
