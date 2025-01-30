@@ -1,7 +1,7 @@
 <script setup lang="ts">
 interface PR {
   prLink: string
-  status: string
+  status: 'Open' | 'Merged' | 'Closed'
 }
 
 interface Project {
@@ -102,6 +102,7 @@ defineProps<{
                 <span
                   :class="{
                     'text-green-500': pr.status === 'Open',
+                    'text-yellow-500': pr.status === 'Merged',
                     'text-red-500': pr.status === 'Closed',
                   }"
                   >({{ pr.status }})</span

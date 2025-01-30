@@ -51,37 +51,6 @@
                 placeholder: 'johndoe',
               },
             },
-            organization: {
-              label: 'GSoC Organization',
-              description: 'The organization you contributed to',
-              inputProps: {
-                placeholder: 'e.g., TensorFlow, Django, etc.',
-              },
-            },
-            projectTitle: {
-              label: 'Project Title',
-              description: 'Title of your GSoC project',
-              inputProps: {
-                placeholder: 'e.g., Implement Feature X for Project Y',
-              },
-            },
-            projectDescription: {
-              label: 'Project Description',
-              description:
-                'Detailed description of your GSoC project (minimum 200 characters)',
-              component: 'textarea',
-              inputProps: {
-                placeholder:
-                  'Include:\n- Project goals\n- Your contributions\n- Technologies used\n- Challenges faced\n- Achievements',
-              },
-            },
-            projectLink: {
-              label: 'Project Link',
-              description: 'Link to your GSoC project page or final submission',
-              inputProps: {
-                placeholder: 'https://summerofcode.withgoogle.com/projects/...',
-              },
-            },
           }"
           @submit="handleSubmit"
         >
@@ -116,6 +85,33 @@ const router = useRouter()
 const isSubmitting = ref(false)
 const { toast } = useToast()
 
+const prSchema = z
+  .object({
+    prLink: z.string().url('Must be a valid URL').describe('PR Link / Link to your pull request'),
+    status: z.enum(['Open', 'Merged', 'Closed'], {
+      required_error: 'Please select PR status',
+    }).describe('PR Status'),
+  })
+  .describe('PR Details')
+
+const projectSchema = z
+  .object({
+    name: z.string().min(1, 'Project name is required'),
+    githubLink: z.string().url('Must be a valid GitHub URL'),
+    prs: z.array(prSchema).min(0, 'At least one PR is required').describe('PRs'),
+  })
+  .describe('Project Details')
+
+const orgSchema = z
+  .object({
+    name: z.string().min(1, 'Organization name is required'),
+    projects: z
+      .array(projectSchema)
+      .min(1, 'At least one project is required')
+      .describe('Selected Projects'),
+  })
+  .describe('Organization Details')
+
 const schema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
   githubEmail: z.string().email('Invalid email address'),
@@ -133,25 +129,10 @@ const schema = z.object({
       /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i,
       'Invalid GitHub username format'
     ),
-  organization: z
-    .string()
-    .min(2, 'Organization name must be at least 2 characters'),
-  projectTitle: z
-    .string()
-    .min(10, 'Project title must be at least 10 characters'),
-  projectDescription: z
-    .string()
-    .min(
-      200,
-      'Please provide a more detailed description (minimum 200 characters)'
-    ),
-  projectLink: z
-    .string()
-    .url('Must be a valid URL')
-    .refine(
-      (url) => url.includes('summerofcode.withgoogle.com'),
-      'Must be a valid GSoC project URL'
-    ),
+    organizations: z
+    .array(orgSchema)
+    .min(1, 'At least one organization is required')
+    .describe('Organizations'),
 })
 
 async function handleSubmit(data: z.infer<typeof schema>) {

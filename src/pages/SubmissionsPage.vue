@@ -17,22 +17,28 @@ interface Submission {
   createdAt: string
 }
 
+interface PR {
+  prLink: string
+  status: 'Open' | 'Merged' | 'Closed'
+}
+
+interface Project {
+  name: string
+  githubLink: string
+  prs: PR[]
+}
+
+interface Organization {
+  name: string
+  projects: Project[]
+}
+
 interface GSoCSubmission {
   name: string
   githubEmail: string
   collegeEmail: string
   githubId: string
-  organizations: {
-    name: string
-    projects: {
-      name: string
-      githubLink: string
-      prs: {
-        prLink: string
-        status: string
-      }[]
-    }[]
-  }[]
+  organizations: Organization[]
 }
 
 interface ProjectSubmission {
@@ -61,7 +67,32 @@ function isGSoCSubmission(data: unknown): data is GSoCSubmission {
     data !== null &&
     'githubId' in data &&
     'organizations' in data &&
-    Array.isArray(submission.organizations)
+    Array.isArray(submission.organizations) &&
+    submission.organizations.every(
+      (org: any) =>
+        typeof org === 'object' &&
+        org !== null &&
+        'name' in org &&
+        'projects' in org &&
+        Array.isArray(org.projects) &&
+        org.projects.every(
+          (proj: any) =>
+            typeof proj === 'object' &&
+            proj !== null &&
+            'name' in proj &&
+            'githubLink' in proj &&
+            'prs' in proj &&
+            Array.isArray(proj.prs) &&
+            proj.prs.every(
+              (pr: any) =>
+                typeof pr === 'object' &&
+                pr !== null &&
+                'prLink' in pr &&
+                'status' in pr &&
+                ['Open', 'Merged', 'Closed'].includes(pr.status)
+            )
+        )
+    )
   )
 }
 
