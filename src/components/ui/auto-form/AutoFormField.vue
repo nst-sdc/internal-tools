@@ -24,6 +24,10 @@ const delegatedProps = computed(() => {
 const { isDisabled, isHidden, isRequired, overrideOptions } = useDependencies(
   props.fieldName
 )
+
+const fieldLabel = computed(() => {
+  return props.config?.label || props.shape.schema?.description || props.fieldName
+})
 </script>
 
 <template>
@@ -37,7 +41,7 @@ const { isDisabled, isHidden, isRequired, overrideOptions } = useDependencies(
     "
     v-if="!isHidden"
     :field-name="fieldName"
-    :label="shape.schema?.description"
+    :label="fieldLabel"
     :required="isRequired || shape.required"
     :options="overrideOptions || shape.options"
     :disabled="isDisabled"

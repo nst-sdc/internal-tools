@@ -23,8 +23,7 @@
           :field-config="{
             name: {
               label: 'Full Name',
-              description:
-                'Enter your full name as registered with the college',
+              description: 'Enter your full name as registered with the college',
               inputProps: {
                 placeholder: 'Raja Ravi Varma',
               },
@@ -54,11 +53,13 @@
                   'Include:\n- Problem statement\n- Solution approach\n- Technologies used\n- Current progress\n- Future plans',
               },
             },
-            projectLink: {
+            projectDemoLink: {
               label: 'Project Demo Link',
-              description: 'Link to your deployed project (if available)',
+              description: 'Link to your deployed project demo (if available)',
+              component: 'string',
               inputProps: {
-                placeholder: 'https://my-project.com',
+                type: 'url',
+                placeholder: 'https://demo.my-project.com',
               },
             },
             projectGithubLink: {
@@ -119,7 +120,7 @@ const schema = z.object({
       100,
       'Please provide a more detailed description (minimum 100 characters)'
     ),
-  projectLink: z
+  projectDemoLink: z
     .string()
     .url('Must be a valid URL')
     .optional()
