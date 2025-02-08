@@ -16,13 +16,15 @@ function isValidConfig(config: any): config is ConfigItem {
   return config && (config.component || config.label || config.inputProps)
 }
 
-console.log('Field props:', {
-  fieldName: props.fieldName,
-  shape: props.shape,
-  config: props.config,
-  type: props.shape?.type,
-  defaultHandler: DEFAULT_ZOD_HANDLERS[props.shape?.type],
-})
+
+// FOR Debugging
+// console.log('Field props:', {
+//   fieldName: props.fieldName,
+//   shape: props.shape,
+//   config: props.config,
+//   type: props.shape?.type,
+//   defaultHandler: DEFAULT_ZOD_HANDLERS[props.shape?.type],
+// })
 
 const inputComponent = computed(() => {
   if (props.config?.component) {
