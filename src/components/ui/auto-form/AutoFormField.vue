@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="U extends ZodAny">
-import type { ZodAny } from 'zod'
+import type { ZodAny, ZodTypeAny } from 'zod'
 import type { Config, ConfigItem, Shape } from './interface'
 import { computed } from 'vue'
 import { DEFAULT_ZOD_HANDLERS, INPUT_COMPONENTS } from './constant'
@@ -9,13 +9,19 @@ import AutoFormFieldInput from './AutoFormFieldInput.vue'
 const props = defineProps<{
   fieldName: string
   shape: Shape
-  config?: ConfigItem | Config<U>
+  config?: ConfigItem
 }>()
 
 function isValidConfig(config: any): config is ConfigItem {
   return config && (config.component || config.label || config.inputProps)
 }
 
+// Type-safe check for URL validation
+function hasUrlValidation(schema: ZodTypeAny | undefined) {
+  return schema?._def.typeName === 'ZodString' &&
+         Array.isArray(schema._def.checks) &&
+         schema._def.checks.some((check: { kind: string }) => check.kind === 'url')
+}
 
 // FOR Debugging
 // console.log('Field props:', {
@@ -29,17 +35,16 @@ function isValidConfig(config: any): config is ConfigItem {
 const inputComponent = computed(() => {
   if (props.config?.component) {
     return typeof props.config.component === 'string'
-      ? INPUT_COMPONENTS[props.config.component]
+      ? INPUT_COMPONENTS[props.config.component as keyof typeof INPUT_COMPONENTS]
       : props.config.component
   }
 
-  if (props.shape?.schema?._def.typeName === 'ZodString' &&
-      props.shape.schema._def.checks?.some((check: any) => check.kind === 'url')) {
+  if (hasUrlValidation(props.shape?.schema)) {
     return AutoFormFieldInput
   }
 
   const defaultHandler = DEFAULT_ZOD_HANDLERS[props.shape?.type] || 'input'
-  return INPUT_COMPONENTS[defaultHandler] || AutoFormFieldInput
+  return INPUT_COMPONENTS[defaultHandler as keyof typeof INPUT_COMPONENTS] || AutoFormFieldInput
 })
 
 const delegatedProps = computed(() => {
@@ -47,8 +52,7 @@ const delegatedProps = computed(() => {
     ? { schema: props.shape?.schema }
     : {}
 
-  if (props.shape?.schema?._def.typeName === 'ZodString' &&
-      props.shape.schema._def.checks?.some((check: any) => check.kind === 'url')) {
+  if (hasUrlValidation(props.shape?.schema)) {
     return {
       ...baseProps,
       ...props.config?.inputProps,
