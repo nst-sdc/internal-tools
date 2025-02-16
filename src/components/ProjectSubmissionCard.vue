@@ -40,6 +40,7 @@ defineProps<{
 
         <div class="flex space-x-4">
           <a
+            v-if="submission.projectLink"
             :href="submission.projectLink"
             target="_blank"
             class="text-blue-500 hover:underline flex items-center"
