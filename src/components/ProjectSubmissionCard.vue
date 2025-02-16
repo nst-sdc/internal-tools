@@ -62,6 +62,7 @@ defineProps<{
           </a>
 
           <a
+            v-if="submission.projectGithubLink"
             :href="submission.projectGithubLink"
             target="_blank"
             class="text-blue-500 hover:underline flex items-center"
