@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { Textarea } from '@/components.ui/textarea'
 import { computed } from 'vue'
 import AutoFormLabel from './AutoFormLabel.vue'
 import { beautifyObjectName } from './utils'
@@ -22,7 +22,7 @@ const inputComponent = computed(() =>
 <template>
   <FormField v-slot="slotProps" :name="fieldName">
     <FormItem v-bind="$attrs">
-      <AutoFormLabel v-if="!config?.hideLabel" :required="required">
+      <AutoFormLabel v-if="!config?.hideLabel">
         {{ config?.label || beautifyObjectName(label ?? fieldName) }}
       </AutoFormLabel>
       <FormControl>
