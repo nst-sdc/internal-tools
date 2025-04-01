@@ -22,7 +22,7 @@ const inputComponent = computed(() =>
 <template>
   <FormField v-slot="slotProps" :name="fieldName">
     <FormItem v-bind="$attrs">
-      <AutoFormLabel v-if="!config?.hideLabel" :required="required">
+      <AutoFormLabel v-if="!config?.hideLabel">
         {{ config?.label || beautifyObjectName(label ?? fieldName) }}
       </AutoFormLabel>
       <FormControl>
