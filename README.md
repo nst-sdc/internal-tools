@@ -18,7 +18,6 @@ This application provides a modern and responsive user interface built with Vue 
 
 ## Project Structure
 
-```
 sdc-internal-tools/
 ├── src/                    # Frontend source code
 │   ├── assets/             # Static assets (images, CSS)
@@ -35,7 +34,6 @@ sdc-internal-tools/
 ├── vite.config.ts          # Vite configuration
 ├── tailwind.config.js      # Tailwind CSS configuration
 └── package.json            # Dependencies and scripts
-```
 
 ## API Endpoints
 
@@ -71,10 +69,9 @@ npm install
 ### Development
 
 ```sh
-# Run both backend and frontend in development mode
 npm run dev
 
-npm run dev:client   # Frontend only
+npm run dev:client  
 ```
 
 ### Production
